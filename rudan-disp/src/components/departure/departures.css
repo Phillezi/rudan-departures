@@ -1,0 +1,14 @@
+ul {
+    list-style: none;
+}
+
+li {
+    padding: 1rem;
+}
+
+.transport {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 0.2rem;
+}
