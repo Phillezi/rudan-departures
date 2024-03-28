@@ -18,6 +18,7 @@ function App() {
         const data = await response.json();
         setDepartures(data);
         setLoading(false);
+        setError(null);
       } catch (error) {
         setError(error);
         setLoading(false);
@@ -31,21 +32,20 @@ function App() {
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, []);
 
-  // Update currentIndex to cycle through departures
   useEffect(() => {  
     const intervalId = setInterval(() => {
       setCurrentIndex(prevIndex => (prevIndex + 1) % departures.length);
     }, import.meta.env.VITE_DEPARTURES_TIMER_PER_DEPARTURE);
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [departures]);
-  
+
   useEffect(() => {
-    const endIndex = (currentIndex + import.meta.env.VITE_DEPARTURES_PER_PAGE) % departures.length;
-    const newDisplayedDepartures = (currentIndex + import.meta.env.VITE_DEPARTURES_PER_PAGE) > departures.length
-      ? [...departures.slice(currentIndex), ...departures.slice(0, endIndex)]
-      : departures.slice(currentIndex, endIndex);
-    setDisplayedDepartures(newDisplayedDepartures.slice(0, import.meta.env.VITE_DEPARTURES_PER_PAGE));
-    }, [currentIndex, departures]);
+    if(displayedDepartures.length < import.meta.env.VITE_DEPARTURES_PER_PAGE) {
+      setDisplayedDepartures(departures.slice(0, import.meta.env.VITE_DEPARTURES_PER_PAGE));
+    }
+    displayedDepartures.push(departures[(currentIndex+import.meta.env.VITE_DEPARTURES_PER_PAGE)%departures.length]);
+    displayedDepartures.shift();
+  }, [currentIndex, departures])
   
 
   return (
