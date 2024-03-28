@@ -6,6 +6,7 @@ function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayedDepartures, setDisplayedDepartures] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,17 +32,21 @@ function App() {
   }, []);
 
   // Update currentIndex to cycle through departures
-  useEffect(() => {
+  useEffect(() => {  
     const intervalId = setInterval(() => {
       setCurrentIndex(prevIndex => (prevIndex + 1) % departures.length);
     }, import.meta.env.VITE_DEPARTURES_TIMER_PER_DEPARTURE);
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [departures]);
-
-  const endIndex = currentIndex + import.meta.env.VITE_DEPARTURES_PER_PAGE;
-  const displayedDepartures = endIndex > departures.length
-    ? [...departures.slice(currentIndex), ...departures.slice(0, endIndex % departures.length)]
-    : departures.slice(currentIndex, endIndex);
+  
+  useEffect(() => {
+    const endIndex = (currentIndex + import.meta.env.VITE_DEPARTURES_PER_PAGE) % departures.length;
+    const newDisplayedDepartures = (currentIndex + import.meta.env.VITE_DEPARTURES_PER_PAGE) > departures.length
+      ? [...departures.slice(currentIndex), ...departures.slice(0, endIndex)]
+      : departures.slice(currentIndex, endIndex);
+    setDisplayedDepartures(newDisplayedDepartures.slice(0, import.meta.env.VITE_DEPARTURES_PER_PAGE));
+    }, [currentIndex, departures]);
+  
 
   return (
     <div>
