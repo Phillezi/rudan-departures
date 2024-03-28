@@ -1,4 +1,5 @@
 # A simple webapp that displays departures from rudan
+Running: [here](https://rudan-departures.app.cloud.cbh.kth.se/).
 ## Frontend
 Made with Vite and React
 ## Backend
