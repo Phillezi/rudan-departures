@@ -5,6 +5,12 @@ Made with Vite and React
 ## Backend
 Made with go, has a api path that acts as a proxy to serve SL departures from the path specified in the env variable `SL_API_URL`.
 
+## Running the docker image
+```bash
+docker run -p 8080:8080 phillezi/rudan-departures
+
+```
+
 ## Building and running
 To build and run you need node, nvm, git and Docker.
 ```bash
@@ -16,4 +22,5 @@ npm run build
 cd ..
 docker build -t rudan-departures:latest .
 docker run -p 8080:8080 rudan-departures
+
 ```
