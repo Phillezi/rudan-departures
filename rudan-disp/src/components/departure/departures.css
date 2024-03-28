@@ -1,3 +1,7 @@
+.departures {
+    max-height: 80vh;
+}
+
 ul {
     list-style: none;
 }
