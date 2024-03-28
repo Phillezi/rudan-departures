@@ -8,6 +8,10 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [displayedDepartures, setDisplayedDepartures] = useState([]);
 
+  const refetchTimer = parseInt(import.meta.env.VITE_DEPARTURES_TIMER_REFETCH);
+  const departureTimer = parseInt(import.meta.env.VITE_DEPARTURES_TIMER_PER_DEPARTURE);
+  const departuresPerPage = parseInt(import.meta.env.VITE_DEPARTURES_PER_PAGE);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,7 +31,7 @@ function App() {
 
     fetchData();
 
-    const intervalId = setInterval(fetchData, import.meta.env.VITE_DEPARTURES_TIMER_REFETCH);
+    const intervalId = setInterval(fetchData, refetchTimer);
 
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, []);
@@ -35,15 +39,15 @@ function App() {
   useEffect(() => {  
     const intervalId = setInterval(() => {
       setCurrentIndex(prevIndex => (prevIndex + 1) % departures.length);
-    }, import.meta.env.VITE_DEPARTURES_TIMER_PER_DEPARTURE);
+    }, departureTimer);
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [departures]);
 
   useEffect(() => {
-    if(displayedDepartures.length < import.meta.env.VITE_DEPARTURES_PER_PAGE) {
-      setDisplayedDepartures(departures.slice(0, import.meta.env.VITE_DEPARTURES_PER_PAGE));
+    if(displayedDepartures.length < departuresPerPage) {
+      setDisplayedDepartures(departures.slice(0, departuresPerPage));
     }
-    displayedDepartures.push(departures[(currentIndex+import.meta.env.VITE_DEPARTURES_PER_PAGE)%departures.length]);
+    displayedDepartures.push(departures[(currentIndex+departuresPerPage)%departures.length]);
     displayedDepartures.shift();
   }, [currentIndex, departures])
   
